@@ -7,6 +7,11 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.widget.Toast;
+
+import com.google.ar.core.ArCoreApk;
+import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
+import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,10 +28,16 @@ public class MainActivity extends AppCompatActivity {
     private void initApp() {
         //Check for camera permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            //Launch camera with ARCore
+            Toast.makeText(this, "Camera permissions are granted", Toast.LENGTH_LONG).show();
+            if (apkArCoreInstalled()) {
+                //Launch camera with ARCore
+                Toast.makeText(this, "Should launch ARCore now", Toast.LENGTH_LONG).show();
+            }
         } else if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
             //Show dialogue to explain why camera is required
+            Toast.makeText(this, "The camera is required for this app to work!", Toast.LENGTH_LONG).show();
         } else {
+            Toast.makeText(this, "Requesting permissions", Toast.LENGTH_LONG).show();
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_PERMISSION_CAMERA);
         }
     }
@@ -35,10 +46,32 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE_PERMISSION_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //Launch camera with ARCore
+                if (apkArCoreInstalled()) {
+                    //Launch camera with ARCore
+                    Toast.makeText(this, "Should launch ARCore now", Toast.LENGTH_LONG).show();
+                }
             } else {
                 //Display error that camera cannot be used without permissions
+                Toast.makeText(this, "Error - Camera Permissions Required", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public boolean apkArCoreInstalled() {
+        try {
+            switch (ArCoreApk.getInstance().requestInstall(this, true)) {
+                case INSTALLED:
+                    Toast.makeText(this, "ARCore is already installed", Toast.LENGTH_LONG).show();
+                    return true;
+                case INSTALL_REQUESTED:
+                    Toast.makeText(this, "ARCore install is requested", Toast.LENGTH_LONG).show();
+                    return false;
+            }
+        } catch (UnavailableDeviceNotCompatibleException e) {
+            Toast.makeText(this, "The device is not compatible with ARCore", Toast.LENGTH_LONG).show();
+        } catch (UnavailableUserDeclinedInstallationException e) {
+            Toast.makeText(this, "The user declined installation of ARCore", Toast.LENGTH_LONG).show();
+        }
+        return false;
     }
 }
