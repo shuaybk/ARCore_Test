@@ -1,0 +1,2 @@
+rootProject.name='ARCore Test'
+include ':app'
