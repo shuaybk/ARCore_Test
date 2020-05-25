@@ -1,2 +1,2 @@
-rootProject.name='ARCore Test'
 include ':app'
+rootProject.name='ARCoreTest'
