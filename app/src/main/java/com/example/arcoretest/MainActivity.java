@@ -6,16 +6,26 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
+import com.google.ar.core.Anchor;
 import com.google.ar.core.ArCoreApk;
+import com.google.ar.core.HitResult;
+import com.google.ar.core.Plane;
 import com.google.ar.core.exceptions.UnavailableDeviceNotCompatibleException;
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException;
+import com.google.ar.sceneform.rendering.ModelRenderable;
+import com.google.ar.sceneform.ux.ArFragment;
+import com.google.ar.sceneform.ux.BaseArFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE_PERMISSION_CAMERA = 10;
+
+    private ArFragment arFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,17 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Requesting permissions", Toast.LENGTH_LONG).show();
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_PERMISSION_CAMERA);
         }
+
+        arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
+
+        arFragment.setOnTapArPlaneListener(new BaseArFragment.OnTapArPlaneListener() {
+            @Override
+            public void onTapPlane(HitResult hitResult, Plane plane, MotionEvent motionEvent) {
+                Anchor anchor = hitResult.createAnchor();
+
+
+            }
+        });
     }
 
     @Override
