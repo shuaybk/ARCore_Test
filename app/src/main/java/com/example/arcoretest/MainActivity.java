@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Camera permissions are granted", Toast.LENGTH_LONG).show();
             if (apkArCoreInstalled()) {
                 //Launch camera with ARCore
+                initArSession();
                 Toast.makeText(this, "Should launch ARCore now", Toast.LENGTH_LONG).show();
             }
         } else if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
@@ -54,13 +55,17 @@ public class MainActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_PERMISSION_CAMERA);
         }
 
+
+    }
+
+    private void initArSession() {
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
 
         arFragment.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> {
             Anchor anchor = hitResult.createAnchor();
 
             ModelRenderable.builder()
-                    .setSource(this, Uri.parse("Rooster(1).sfb"))
+                    .setSource(this, Uri.parse("Rooster.sfb"))
                     .build()
                     .thenAccept(modelRenderable -> addModelToScene(anchor, modelRenderable))
                     .exceptionally(throwable -> {
@@ -86,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (apkArCoreInstalled()) {
                     //Launch camera with ARCore
+                    initArSession();
                     Toast.makeText(this, "Should launch ARCore now", Toast.LENGTH_LONG).show();
                 }
             } else {

@@ -18,7 +18,7 @@
           metallic: 0,
         },
         {
-          roughness: 0.5,
+          roughness: 1,
         },
         {
           opacity: null,
@@ -34,10 +34,10 @@
       'Orientation',
     ],
     collision: {},
-    file: 'sampledata/Rooster(1).obj',
-    name: 'Rooster(1)',
+    file: 'sampledata/Rooster.obj',
+    name: 'Rooster',
     recenter: 'root',
-    scale: 0.77681699999999998,
+    scale: 0.05,
   },
   samplers: [
     {
