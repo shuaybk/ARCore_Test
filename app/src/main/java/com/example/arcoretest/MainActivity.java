@@ -53,13 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
         arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.arFragment);
 
-        arFragment.setOnTapArPlaneListener(new BaseArFragment.OnTapArPlaneListener() {
-            @Override
-            public void onTapPlane(HitResult hitResult, Plane plane, MotionEvent motionEvent) {
-                Anchor anchor = hitResult.createAnchor();
+        arFragment.setOnTapArPlaneListener((hitResult, plane, motionEvent) -> {
+            Anchor anchor = hitResult.createAnchor();
 
-
-            }
+            
         });
     }
 
